@@ -14,7 +14,7 @@ fs.readFile('Day1.txt', 'utf8', function (err, data) {
 			total += fuel;
 			fuel = requiredFuel(fuel);
 		}
-	}); x
+	});
 
 	console.log(total);
 });
