@@ -41,6 +41,7 @@ fs.readFile('Day8.txt', 'utf8', function (err, data) {
 			return "2";
 		}
 		else {
+			//turn 0 to spaces so we can see better
 			return char == "0" ? " " : "1";
 		}
 	}
