@@ -9,11 +9,11 @@ fs.readFile('Day2.txt', 'utf8', function (err, data) {
 
 	let register = data.split(',').map(Number);
 
-	console.log("P1:", intcode.compute(12, 2, register));
+	console.log("P1:", intcode.compute(12, 2, register)[0]);
 
 	for (let noun = 1; noun <= 99; noun++) {
 		for (let verb = 1; verb <= 99; verb++) {
-			let result = intcode.compute(noun, verb, register);
+			let result = intcode.compute(noun, verb, register)[0];
 			if(result == 19690720) {
 				console.log("P2:", 100*noun+verb);
 			}
