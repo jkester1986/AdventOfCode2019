@@ -1,16 +1,19 @@
 module.exports = {
-	compute: function intcode(noun, verb, register, input) {
+	compute: function intcode(noun, verb, register, input1, input2) {
 		let myReg = [...register];
 
 		let position = 0,
-			instruction = myReg[0];
+			instruction = myReg[0],
+			usedInput1 = false;
 		myReg[1] = noun;
 		myReg[2] = verb;
+		
 
 		let { opCode, modeA, modeB, modeC } = getModes(instruction);
 
 		// console.log({opCode, modeA, modeB, modeC})
 
+		let output;
 		while(opCode != 99) {
 			let param1 = getValueFromMode(modeC, position + 1, myReg),
 				param2 = getValueFromMode(modeB, position + 2, myReg),
@@ -36,12 +39,14 @@ module.exports = {
 					break;
 				// save input
 				case 3:
-					myReg[param1] = input;
+					myReg[param1] = usedInput1 ? input2 : input1;
+					usedInput1 = true;
 					position += 2;
 					break;
 				// output
 				case 4:
-					console.log("output:", myReg[param1]);
+					output = myReg[param1];
+					// console.log("output:", myReg[param1]);
 					position += 2;
 					break;
 				// jump if not 0
@@ -80,7 +85,7 @@ module.exports = {
 			modeC = newModes?.modeC;
 		}
 
-		return myReg;
+		return output;
 
 	}
 }

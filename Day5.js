@@ -9,6 +9,6 @@ fs.readFile('Day5.txt', 'utf8', function (err, data) {
 
 	let register = data.split(',').map(Number);
 
-	// intcode.compute(register[1], register[2], register, 1);
+	intcode.compute(register[1], register[2], register, 1);
 	intcode.compute(register[1], register[2], register, 5);
 });
