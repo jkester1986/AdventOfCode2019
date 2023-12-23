@@ -9,17 +9,22 @@ module.exports = {
 
 		let { opCode, modeA, modeB, modeC } = getModes(instruction);
 
+		// console.log({opCode, modeA, modeB, modeC})
+
 		while(opCode != 99) {
 			let storeLoc;
 			let param1 = getValueFromMode(modeC, position + 1, myReg),
 				param2 = getValueFromMode(modeB, position + 2, myReg),
-				param3 = getValueFromMode(modeA, position + 3, register);
+				param3 = getValueFromMode(modeA, position + 3, myReg);
 
 				/*
-				console.log({modeC, modeB, modeA});
-				console.log({opCode, param1, param2, param3});
 				*/
+				console.log({opCode, position})
+				console.log(myReg.join(","));
+				console.log({modeC, modeB, modeA});
+				console.log({ param1, param2, param3});
 
+			// advance by however many params were used + 1 for the opcode
 			switch(opCode) {
 				// sum
 				case 1:
@@ -35,29 +40,32 @@ module.exports = {
 					break;
 				// save input
 				case 3:
-					myReg[param1] = input; //first time through, position 225 is 5
+					myReg[param1] = input;
 					position += 2;
 					break;
 				// output
 				case 4:
-					console.log(myReg[param1]);
+					console.log("output:", myReg[param1]);
 					position += 2;
 					break;
 				// jump if true
 				case 5:
-					if (param1 !== 0) position = param2;
-					break;
+					if (param1 !== 0) position = myReg[param2];
+					else position += 3;
 				// jump if false
 				case 6:
-					if (param1 === 0) position = param2;
+					if (param1 === 0) position = myReg[param2];
+					else position += 3;
 					break;
 				// less than
 				case 7:
 					myReg[param3] = param1 < param2 ? 1 : 0;
+					position += 4;
 					break;
 				// equals
 				case 8:
 					myReg[param3] = param1 === param2 ? 1 : 0;
+					position += 4;
 					break;
 				default:
 					console.error("Something went wrong, myReg opcode is", opCode, "position is", position);
@@ -65,19 +73,23 @@ module.exports = {
 					break;
 			}
 			let newModes = getModes(myReg[position]);
-			opCode = newModes.opCode;
-			modeA = newModes.modeA;
-			modeB = newModes.modeB;
-			modeC = newModes.modeC;
+			opCode = newModes?.opCode;
+			modeA = newModes?.modeA;
+			modeB = newModes?.modeB;
+			modeC = newModes?.modeC;
+			console.log("\n\n")
 		}
 
 		return myReg;
+
 	}
 }
 
 function getModes(instruction) {
+	if (!instruction) return;
 	let opCode, modeA, modeB, modeC;
 
+	console.log("instruction:", instruction);
 	stringIns = instruction.toString();
 	if (stringIns.length === 1) {
 		opCode = instruction;
@@ -97,8 +109,10 @@ function getModes(instruction) {
 
 function getValueFromMode(mode, position, register) {
 	switch(mode) {
+		// position mode
 		case 0:
 			return register[position];
+		// immediate mode
 		case 1:
 			return position;
 	}
