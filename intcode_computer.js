@@ -4,7 +4,8 @@ module.exports = {
 
 		let position = 0,
 			instruction = myReg[0],
-			usedInput1 = false;
+			usedInput1 = false,
+			relativeBase = 0;
 		myReg[1] = noun;
 		myReg[2] = verb;
 		
@@ -73,6 +74,11 @@ module.exports = {
 					myReg[param3] = myReg[param1] === myReg[param2] ? 1 : 0;
 					position += 4;
 					break;
+				// adjust relative base
+				case 9:
+					relativeBase += myReg[param1];
+					position += 2;
+					break;
 				default:
 					console.error("Something went wrong, myReg opcode is", opCode, "position is", position);
 					process.exit();
@@ -124,6 +130,8 @@ function getValueFromMode(mode, position, register) {
 		// immediate mode
 		case 1:
 			return position;
+		case 2:
+			return base + position;
 	}
 }
 

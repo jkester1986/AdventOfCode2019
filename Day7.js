@@ -28,5 +28,7 @@ fs.readFile('Day7.txt', 'utf8', function (err, data) {
     }
   }
 
+  // see https://www.reddit.com/r/adventofcode/comments/e7aqcb/2019_day_7_part_2_confused_with_the_question/ for P2 clarifications
+
   console.log("highest output:", highestOut);
 });
